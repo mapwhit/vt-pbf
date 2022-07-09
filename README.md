@@ -1,4 +1,10 @@
-# vt-pbf [![CircleCI](https://circleci.com/gh/mapbox/vt-pbf.svg?style=svg)](https://circleci.com/gh/mapbox/vt-pbf)
+[![NPM version][npm-image]][npm-url]
+[![Build Status][build-image]][build-url]
+[![Dependency Status][deps-image]][deps-url]
+
+# @maphit/vt-pbf
+
+Fork of vt-pbf
 
 Serialize [Mapbox vector tiles](https://github.com/mapbox/vector-tile-spec) to binary protobufs in javascript.
 
@@ -44,3 +50,13 @@ fs.writeFileSync('my-tile.pbf', buff)
 - `layerMap` is an object where keys are layer names and values are a geojson-vt tile,
 - `options` is an object (optional argument). There are 2 supported keys: `version` to define the version of the mvt spec used and `extent` to define the extent of the tile. `version` defaults to 1 and `extent` to 4096.
 
+[vt-pbf]: https://npmjs.org/package/vt-pbf
+
+[npm-image]: https://img.shields.io/npm/v/@mapwhit/vt-pbf
+[npm-url]: https://npmjs.org/package/@mapwhit/vt-pbf
+
+[build-url]: https://github.com/mapwhit/vt-pbf/actions/workflows/check.yaml
+[build-image]: https://img.shields.io/github/workflow/status/mapwhit/vt-pbf/check
+
+[deps-image]: https://img.shields.io/librariesio/release/npm/@mapwhit/vt-pbf
+[deps-url]: https://libraries.io/npm/@mapwhit%2Fvt-pbf

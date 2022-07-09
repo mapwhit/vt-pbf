@@ -27,8 +27,7 @@ function fromVectorTileJs (tile) {
  * @param {Number} [options.extent=4096] - Extent of the vector tile
  * @return {Buffer} uncompressed, pbf-serialized tile data
  */
-function fromGeojsonVt (layers, options) {
-  options = options || {}
+function fromGeojsonVt (layers, options = {}) {
   const l = {}
   for (const k in layers) {
     l[k] = new GeoJSONWrapper(layers[k].features, options)
@@ -39,9 +38,9 @@ function fromGeojsonVt (layers, options) {
   return fromVectorTileJs({ layers: l })
 }
 
-function writeTile (tile, pbf) {
-  for (const key in tile.layers) {
-    pbf.writeMessage(3, writeLayer, tile.layers[key])
+function writeTile ({ layers }, pbf) {
+  for (const key in layers) {
+    pbf.writeMessage(3, writeLayer, layers[key])
   }
 }
 
@@ -50,7 +49,6 @@ function writeLayer (layer, pbf) {
   pbf.writeStringField(1, layer.name || '')
   pbf.writeVarintField(5, layer.extent || 4096)
 
-  let i
   const context = {
     keys: [],
     values: [],
@@ -58,18 +56,18 @@ function writeLayer (layer, pbf) {
     valuecache: {}
   }
 
-  for (i = 0; i < layer.length; i++) {
+  for (let i = 0; i < layer.length; i++) {
     context.feature = layer.feature(i)
     pbf.writeMessage(2, writeFeature, context)
   }
 
   const keys = context.keys
-  for (i = 0; i < keys.length; i++) {
+  for (let i = 0; i < keys.length; i++) {
     pbf.writeStringField(3, keys[i])
   }
 
   const values = context.values
-  for (i = 0; i < values.length; i++) {
+  for (let i = 0; i < values.length; i++) {
     pbf.writeMessage(4, writeValue, values[i])
   }
 }
@@ -110,7 +108,7 @@ function writeProperties (context, pbf) {
     if (type !== 'string' && type !== 'boolean' && type !== 'number') {
       value = JSON.stringify(value)
     }
-    const valueKey = type + ':' + value
+    const valueKey = `${type}:${value}`
     let valueIndex = valuecache[valueKey]
     if (typeof valueIndex === 'undefined') {
       values.push(value)

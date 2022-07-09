@@ -1,4 +1,4 @@
-const Pbf = require('pbf')
+const Pbf = require('@mapwhit/pbf')
 const GeoJSONWrapper = require('./lib/geojson_wrapper')
 
 module.exports = fromVectorTileJs

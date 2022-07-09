@@ -1,7 +1,7 @@
 check: lint test
 
 lint:
-	./node_modules/.bin/eslint index.js test/*.js bench/index.js
+	./node_modules/.bin/standard index.js test/*.js bench/index.js
 
 test:
 	./node_modules/.bin/tape test/*.js

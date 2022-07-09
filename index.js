@@ -1,5 +1,5 @@
-var Pbf = require('pbf')
-var GeoJSONWrapper = require('./lib/geojson_wrapper')
+const Pbf = require('pbf')
+const GeoJSONWrapper = require('./lib/geojson_wrapper')
 
 module.exports = fromVectorTileJs
 module.exports.fromVectorTileJs = fromVectorTileJs
@@ -13,7 +13,7 @@ module.exports.GeoJSONWrapper = GeoJSONWrapper
  * @return {Buffer} uncompressed, pbf-serialized tile data
  */
 function fromVectorTileJs (tile) {
-  var out = new Pbf()
+  const out = new Pbf()
   writeTile(tile, out)
   return out.finish()
 }
@@ -29,8 +29,8 @@ function fromVectorTileJs (tile) {
  */
 function fromGeojsonVt (layers, options) {
   options = options || {}
-  var l = {}
-  for (var k in layers) {
+  const l = {}
+  for (const k in layers) {
     l[k] = new GeoJSONWrapper(layers[k].features, options)
     l[k].name = k
     l[k].version = options.version
@@ -40,7 +40,7 @@ function fromGeojsonVt (layers, options) {
 }
 
 function writeTile (tile, pbf) {
-  for (var key in tile.layers) {
+  for (const key in tile.layers) {
     pbf.writeMessage(3, writeLayer, tile.layers[key])
   }
 }
@@ -50,8 +50,8 @@ function writeLayer (layer, pbf) {
   pbf.writeStringField(1, layer.name || '')
   pbf.writeVarintField(5, layer.extent || 4096)
 
-  var i
-  var context = {
+  let i
+  const context = {
     keys: [],
     values: [],
     keycache: {},
@@ -63,19 +63,19 @@ function writeLayer (layer, pbf) {
     pbf.writeMessage(2, writeFeature, context)
   }
 
-  var keys = context.keys
+  const keys = context.keys
   for (i = 0; i < keys.length; i++) {
     pbf.writeStringField(3, keys[i])
   }
 
-  var values = context.values
+  const values = context.values
   for (i = 0; i < values.length; i++) {
     pbf.writeMessage(4, writeValue, values[i])
   }
 }
 
 function writeFeature (context, pbf) {
-  var feature = context.feature
+  const feature = context.feature
 
   if (feature.id !== undefined) {
     pbf.writeVarintField(1, feature.id)
@@ -87,16 +87,16 @@ function writeFeature (context, pbf) {
 }
 
 function writeProperties (context, pbf) {
-  var feature = context.feature
-  var keys = context.keys
-  var values = context.values
-  var keycache = context.keycache
-  var valuecache = context.valuecache
+  const feature = context.feature
+  const keys = context.keys
+  const values = context.values
+  const keycache = context.keycache
+  const valuecache = context.valuecache
 
-  for (var key in feature.properties) {
-    var value = feature.properties[key]
+  for (const key in feature.properties) {
+    let value = feature.properties[key]
 
-    var keyIndex = keycache[key]
+    let keyIndex = keycache[key]
     if (value === null) continue // don't encode null value properties
 
     if (typeof keyIndex === 'undefined') {
@@ -106,12 +106,12 @@ function writeProperties (context, pbf) {
     }
     pbf.writeVarint(keyIndex)
 
-    var type = typeof value
+    const type = typeof value
     if (type !== 'string' && type !== 'boolean' && type !== 'number') {
       value = JSON.stringify(value)
     }
-    var valueKey = type + ':' + value
-    var valueIndex = valuecache[valueKey]
+    const valueKey = type + ':' + value
+    let valueIndex = valuecache[valueKey]
     if (typeof valueIndex === 'undefined') {
       values.push(value)
       valueIndex = values.length - 1
@@ -130,26 +130,26 @@ function zigzag (num) {
 }
 
 function writeGeometry (feature, pbf) {
-  var geometry = feature.loadGeometry()
-  var type = feature.type
-  var x = 0
-  var y = 0
-  var rings = geometry.length
-  for (var r = 0; r < rings; r++) {
-    var ring = geometry[r]
-    var count = 1
+  const geometry = feature.loadGeometry()
+  const type = feature.type
+  let x = 0
+  let y = 0
+  const rings = geometry.length
+  for (let r = 0; r < rings; r++) {
+    const ring = geometry[r]
+    let count = 1
     if (type === 1) {
       count = ring.length
     }
     pbf.writeVarint(command(1, count)) // moveto
     // do not write polygon closing path as lineto
-    var lineCount = type === 3 ? ring.length - 1 : ring.length
-    for (var i = 0; i < lineCount; i++) {
+    const lineCount = type === 3 ? ring.length - 1 : ring.length
+    for (let i = 0; i < lineCount; i++) {
       if (i === 1 && type !== 1) {
         pbf.writeVarint(command(2, lineCount - 1)) // lineto
       }
-      var dx = ring[i].x - x
-      var dy = ring[i].y - y
+      const dx = ring[i].x - x
+      const dy = ring[i].y - y
       pbf.writeVarint(zigzag(dx))
       pbf.writeVarint(zigzag(dy))
       x += dx
@@ -162,7 +162,7 @@ function writeGeometry (feature, pbf) {
 }
 
 function writeValue (value, pbf) {
-  var type = typeof value
+  const type = typeof value
   if (type === 'string') {
     pbf.writeStringField(1, value)
   } else if (type === 'boolean') {

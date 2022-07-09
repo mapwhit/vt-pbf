@@ -1,17 +1,17 @@
-var test = require('tape').test
-var geojsonVt = require('geojson-vt')
-var VectorTile = require('@mapbox/vector-tile').VectorTile
-var Pbf = require('pbf')
-var vtvalidate = require('@mapbox/vtvalidate')
-var geojsonFixtures = require('@mapbox/geojson-fixtures')
-var mvtf = require('@mapbox/mvt-fixtures')
-var GeoJsonEquality = require('geojson-equality')
-var eq = new GeoJsonEquality({ precision: 1 })
+const test = require('tape').test
+const geojsonVt = require('geojson-vt')
+const VectorTile = require('@mapbox/vector-tile').VectorTile
+const Pbf = require('pbf')
+const vtvalidate = require('@mapbox/vtvalidate')
+const geojsonFixtures = require('@mapbox/geojson-fixtures')
+const mvtf = require('@mapbox/mvt-fixtures')
+const GeoJsonEquality = require('geojson-equality')
+const eq = new GeoJsonEquality({ precision: 1 })
 
-var vtpbf = require('../')
+const vtpbf = require('../')
 
 test('geojson-vt', function (t) {
-  var geometryTypes = ['polygon', 'point', 'multipoint', 'multipolygon', 'polygon', 'multilinestring']
+  const geometryTypes = ['polygon', 'point', 'multipoint', 'multipolygon', 'polygon', 'multilinestring']
 
   const fixtures = geometryTypes.map(function (type) {
     return {
@@ -22,8 +22,8 @@ test('geojson-vt', function (t) {
 
   fixtures.forEach(function (fixture) {
     t.test(fixture.name, function (t) {
-      var tile = geojsonVt(fixture.data).getTile(0, 0, 0)
-      var buff = vtpbf.fromGeojsonVt({ geojsonLayer: tile })
+      const tile = geojsonVt(fixture.data).getTile(0, 0, 0)
+      const buff = vtpbf.fromGeojsonVt({ geojsonLayer: tile })
       vtvalidate.isValid(buff, (err, invalid) => {
         t.error(err)
 
@@ -31,10 +31,10 @@ test('geojson-vt', function (t) {
 
         // Compare roundtripped features with originals
         const expected = fixture.data.type === 'FeatureCollection' ? fixture.data.features : [fixture.data]
-        var layer = new VectorTile(new Pbf(buff)).layers.geojsonLayer
+        const layer = new VectorTile(new Pbf(buff)).layers.geojsonLayer
         t.equal(layer.length, expected.length, expected.length + ' features')
-        for (var i = 0; i < layer.length; i++) {
-          var actual = layer.feature(i).toGeoJSON(0, 0, 0)
+        for (let i = 0; i < layer.length; i++) {
+          const actual = layer.feature(i).toGeoJSON(0, 0, 0)
           t.ok(eq.compare(actual, expected[i]), 'feature ' + i)
         }
         t.end()
@@ -53,7 +53,7 @@ test('vector-tile-js', function (t) {
     if (!fixture.validity.v2) return
 
     t.test('mvt-fixtures: ' + fixture.id + ' ' + fixture.description, function (t) {
-      var original = new VectorTile(new Pbf(fixture.buffer))
+      const original = new VectorTile(new Pbf(fixture.buffer))
 
       if (fixture.id === '020') {
         t.comment('Skipping test due to https://github.com/mapbox/vt-pbf/issues/30')
@@ -67,8 +67,8 @@ test('vector-tile-js', function (t) {
         return
       }
 
-      var buff = vtpbf(original)
-      var roundtripped = new VectorTile(new Pbf(buff))
+      const buff = vtpbf(original)
+      const roundtripped = new VectorTile(new Pbf(buff))
 
       vtvalidate.isValid(buff, (err, invalid) => {
         t.error(err)
@@ -88,14 +88,14 @@ test('vector-tile-js', function (t) {
         t.ok(!invalid, invalid)
 
         // Compare roundtripped features with originals
-        for (var name in original.layers) {
-          var originalLayer = original.layers[name]
+        for (const name in original.layers) {
+          const originalLayer = original.layers[name]
           t.ok(roundtripped.layers[name], 'layer ' + name)
-          var roundtrippedLayer = roundtripped.layers[name]
+          const roundtrippedLayer = roundtripped.layers[name]
           t.equal(roundtrippedLayer.length, originalLayer.length)
-          for (var i = 0; i < originalLayer.length; i++) {
-            var actual = roundtrippedLayer.feature(i)
-            var expected = originalLayer.feature(i)
+          for (let i = 0; i < originalLayer.length; i++) {
+            const actual = roundtrippedLayer.feature(i)
+            const expected = originalLayer.feature(i)
 
             t.equal(actual.id, expected.id, 'id')
             t.equal(actual.type, expected.type, 'type')

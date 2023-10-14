@@ -1,6 +1,7 @@
+const test = require('node:test')
+const assert = require('node:assert')
 const fs = require('fs')
 const path = require('path')
-const test = require('tape').test
 const Pbf = require('pbf')
 const geojsonVt = require('geojson-vt')
 const VectorTile = require('@mapbox/vector-tile').VectorTile
@@ -10,8 +11,10 @@ const eq = new GeoJsonEquality({ precision: 1 })
 
 const vtpbf = require('../')
 
-test('property encoding', function (t) {
-  test('property encoding: JSON.stringify non-primitive values', function (t) {
+global.DEBUG = true
+
+test('property encoding', async function (t) {
+  await t.test('property encoding: JSON.stringify non-primitive values', function (t) {
     // Includes two properties with a common non-primitive value for
     // https://github.com/mapbox/vt-pbf/issues/9
     const orig = {
@@ -53,15 +56,14 @@ test('property encoding', function (t) {
 
     const first = layer.feature(0).properties
     const second = layer.feature(1).properties
-    t.same(first.c, '{"hello":"world"}')
-    t.same(first.d, '[1,2,3]')
-    t.equals(first.e, undefined)
-    t.same(second.c, '{"goodbye":"planet"}')
-    t.same(second.d, '{"hello":"world"}')
-    t.end()
+    assert.deepEqual(first.c, '{"hello":"world"}')
+    assert.deepEqual(first.d, '[1,2,3]')
+    assert.equal(first.e, undefined)
+    assert.deepEqual(second.c, '{"goodbye":"planet"}')
+    assert.deepEqual(second.d, '{"hello":"world"}')
   })
 
-  test('number encoding https://github.com/mapbox/vt-pbf/pull/11', function (t) {
+  await t.test('number encoding https://github.com/mapbox/vt-pbf/pull/11', function (t) {
     const orig = {
       type: 'Feature',
       properties: {
@@ -81,12 +83,9 @@ test('property encoding', function (t) {
     const layer = vt.layers.geojsonLayer
 
     const properties = layer.feature(0).properties
-    t.equal(properties.large_integer, 39953616224)
-    t.equal(properties.non_integer, 331.75415)
-    t.end()
+    assert.equal(properties.large_integer, 39953616224)
+    assert.equal(properties.non_integer, 331.75415)
   })
-
-  t.end()
 })
 
 test('id encoding', function (t) {
@@ -123,10 +122,9 @@ test('id encoding', function (t) {
   const buff = vtpbf.fromGeojsonVt({ geojsonLayer: tile })
   const vt = new VectorTile(new Pbf(buff))
   const layer = vt.layers.geojsonLayer
-  t.same(layer.feature(0).id, 123)
-  t.notOk(layer.feature(1).id, 'Non-integer values should not be saved')
-  t.notOk(layer.feature(2).id)
-  t.end()
+  assert.deepEqual(layer.feature(0).id, 123)
+  assert.ok(!layer.feature(1).id, 'Non-integer values should not be saved')
+  assert.ok(!layer.feature(2).id)
 })
 
 test('accept geojson-vt options https://github.com/mapbox/vt-pbf/pull/21', function (t) {
@@ -146,13 +144,11 @@ test('accept geojson-vt options https://github.com/mapbox/vt-pbf/pull/21', funct
     features.push(feat)
   }
 
-  t.equal(layer.version, options.version, 'version should be equal')
-  t.equal(layer.extent, options.extent, 'extent should be equal')
+  assert.equal(layer.version, options.version, 'version should be equal')
+  assert.equal(layer.extent, options.extent, 'extent should be equal')
 
   orig.features.forEach(function (expected) {
     const actual = features.shift()
-    t.ok(eq.compare(actual, expected))
+    assert.ok(eq.compare(actual, expected))
   })
-
-  t.end()
 })

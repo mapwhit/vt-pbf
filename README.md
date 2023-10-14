@@ -56,7 +56,7 @@ fs.writeFileSync('my-tile.pbf', buff)
 [npm-url]: https://npmjs.org/package/@mapwhit/vt-pbf
 
 [build-url]: https://github.com/mapwhit/vt-pbf/actions/workflows/check.yaml
-[build-image]: https://img.shields.io/github/workflow/status/mapwhit/vt-pbf/check
+[build-image]: https://img.shields.io/github/actions/workflow/status/mapwhit/vt-pbf/check.yaml?branch=main
 
 [deps-image]: https://img.shields.io/librariesio/release/npm/@mapwhit/vt-pbf
 [deps-url]: https://libraries.io/npm/@mapwhit%2Fvt-pbf

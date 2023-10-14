@@ -12,7 +12,10 @@
   },
   "author": "Anand Thakker <vestibule@anandthakker.net> (http://anandthakker.net/)",
   "license": "MIT",
-  "repository": "mapwhit/vt-pbf",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mapwhit/vt-pbf.git"
+  },
   "dependencies": {
     "@mapbox/point-geometry": "0.1.0",
     "@mapbox/vector-tile": "^1.3.1",

@@ -4,7 +4,7 @@ lint:
 	./node_modules/.bin/standard index.js test/*.js bench/index.js
 
 test:
-	./node_modules/.bin/tape test/*.js
+	node --test
 
 bench:
 	node bench

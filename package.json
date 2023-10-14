@@ -25,7 +25,6 @@
     "benchmark": "^2.1.4",
     "geojson-equality": "^0.2.0",
     "geojson-vt": "^3.2.1",
-    "standard": "~17",
-    "tape": "^5.2.2"
+    "standard": "~17"
   }
 }

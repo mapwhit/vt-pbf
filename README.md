@@ -20,7 +20,7 @@ different:
 
 ```javascript
 var vtpbf = require('vt-pbf')
-var VectorTile = require('@mapbox/vector-tile').VectorTile
+var VectorTile = require('@mapwhit/vector-tile').VectorTile
 var Protobuf = require('pbf')
 
 var data = fs.readFileSync(__dirname + '/fixtures/rectangle-1.0.0.pbf')

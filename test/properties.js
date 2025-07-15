@@ -4,7 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const Pbf = require('pbf')
 const geojsonVt = require('geojson-vt')
-const VectorTile = require('@mapbox/vector-tile').VectorTile
+const VectorTile = require('@mapwhit/vector-tile').VectorTile
 const GeoJsonEquality = require('geojson-equality')
 
 const eq = new GeoJsonEquality({ precision: 1 })

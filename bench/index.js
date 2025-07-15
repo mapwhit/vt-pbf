@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const geojsonVt = require('geojson-vt')
 const Pbf = require('pbf')
-const VectorTile = require('@mapbox/vector-tile').VectorTile
+const VectorTile = require('@mapwhit/vector-tile').VectorTile
 const Benchmark = require('benchmark')
 const serialize = require('../')
 

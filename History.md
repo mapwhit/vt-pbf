@@ -1,4 +1,11 @@
 
+1.1.0 / 2025-07-15
+==================
+
+ * remove unused foo.geojson
+ * use `biome` as a linter and formatter
+ * replace `@mapbox/vector-tile` with `@mapwhit/vector-tile`
+
 1.0.1 / 2023-10-14
 ==================
 

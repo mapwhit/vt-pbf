@@ -17,7 +17,7 @@
     "url": "git+https://github.com/mapwhit/vt-pbf.git"
   },
   "dependencies": {
-    "@mapbox/point-geometry": "0.1.0",
+    "@mapbox/point-geometry": "~1",
     "@mapwhit/pbf": "^1.0.0",
     "@mapwhit/vector-tile": "^1.0.0"
   },
@@ -25,9 +25,8 @@
     "@biomejs/biome": "^2.1.1",
     "@mapbox/geojson-fixtures": "^1.0.0",
     "@mapbox/mvt-fixtures": "^3.6.0",
-    "@mapbox/vtvalidate": "^0.3.1",
     "benchmark": "^2.1.4",
     "geojson-equality": "^0.2.0",
-    "geojson-vt": "^3.2.1"
+    "geojson-vt": "~4"
   }
 }

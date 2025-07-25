@@ -17,7 +17,7 @@
     "url": "git+https://github.com/mapwhit/vt-pbf.git"
   },
   "dependencies": {
-    "@mapbox/point-geometry": "0.1.0",
+    "@mapbox/point-geometry": "~1",
     "@mapwhit/pbf": "^1.0.0",
     "@mapwhit/vector-tile": "^1.0.0"
   },

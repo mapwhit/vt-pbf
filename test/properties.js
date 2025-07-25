@@ -2,8 +2,8 @@ const test = require('node:test');
 const fs = require('node:fs');
 const path = require('node:path');
 const Pbf = require('pbf');
-const geojsonVt = require('geojson-vt');
-const VectorTile = require('@mapwhit/vector-tile').VectorTile;
+const { default: geojsonVt } = require('geojson-vt');
+const { VectorTile } = require('@mapwhit/vector-tile');
 const GeoJsonEquality = require('geojson-equality');
 
 const eq = new GeoJsonEquality({ precision: 1 });

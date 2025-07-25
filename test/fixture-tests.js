@@ -1,6 +1,6 @@
 const test = require('node:test');
-const geojsonVt = require('geojson-vt');
-const VectorTile = require('@mapwhit/vector-tile').VectorTile;
+const { default: geojsonVt } = require('geojson-vt');
+const { VectorTile } = require('@mapwhit/vector-tile');
 const Pbf = require('pbf');
 const geojsonFixtures = require('@mapbox/geojson-fixtures');
 const mvtf = require('@mapbox/mvt-fixtures');

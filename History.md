@@ -1,4 +1,11 @@
 
+1.1.1 / 2025-07-25
+==================
+
+ * upgrade `geojson-vt` to ~4
+ * remove `@mapbox/vtvalidate` from tests
+ * upgrade `@mapbox/point-geometry` to ~1
+
 1.1.0 / 2025-07-15
 ==================
 

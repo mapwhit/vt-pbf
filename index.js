@@ -1,5 +1,6 @@
 import Pbf from '@mapwhit/pbf';
 import GeoJSONWrapper from './lib/geojson_wrapper.js';
+
 export default fromVectorTileJs;
 export { GeoJSONWrapper };
 
@@ -11,7 +12,9 @@ export { GeoJSONWrapper };
  */
 export function fromVectorTileJs(tile) {
   const out = new Pbf();
-  writeTile(tile, out);
+  for (const layer of Object.values(tile.layers)) {
+    out.writeMessage(3, writeLayer, layer);
+  }
   return out.finish();
 }
 
@@ -25,20 +28,11 @@ export function fromVectorTileJs(tile) {
  * @return {Buffer} uncompressed, pbf-serialized tile data
  */
 export function fromGeojsonVt(layers, options = {}) {
-  const l = {};
-  for (const k in layers) {
-    l[k] = new GeoJSONWrapper(layers[k].features, options);
-    l[k].name = k;
-    l[k].version = options.version;
-    l[k].extent = options.extent;
+  const out = new Pbf();
+  for (const [name, layer] of Object.entries(layers)) {
+    out.writeMessage(3, writeLayer, new GeoJSONWrapper(layer.features, options, name));
   }
-  return fromVectorTileJs({ layers: l });
-}
-
-function writeTile({ layers }, pbf) {
-  for (const key in layers) {
-    pbf.writeMessage(3, writeLayer, layers[key]);
-  }
+  return out.finish();
 }
 
 function writeLayer(layer, pbf) {
@@ -58,14 +52,12 @@ function writeLayer(layer, pbf) {
     pbf.writeMessage(2, writeFeature, context);
   }
 
-  const keys = context.keys;
-  for (let i = 0; i < keys.length; i++) {
-    pbf.writeStringField(3, keys[i]);
+  for (const key of context.keys) {
+    pbf.writeStringField(3, key);
   }
 
-  const values = context.values;
-  for (let i = 0; i < values.length; i++) {
-    pbf.writeMessage(4, writeValue, values[i]);
+  for (const value of context.values) {
+    pbf.writeMessage(4, writeValue, value);
   }
 }
 
@@ -82,17 +74,13 @@ function writeFeature(context, pbf) {
 }
 
 function writeProperties(context, pbf) {
-  const feature = context.feature;
-  const keys = context.keys;
-  const values = context.values;
-  const keycache = context.keycache;
-  const valuecache = context.valuecache;
+  const { feature, keys, values, keycache, valuecache } = context;
 
   for (const key in feature.properties) {
     let value = feature.properties[key];
+    if (value === null) continue; // don't encode null value properties
 
     let keyIndex = keycache[key];
-    if (value === null) continue; // don't encode null value properties
 
     if (typeof keyIndex === 'undefined') {
       keys.push(key);
@@ -157,18 +145,21 @@ function writeGeometry(feature, pbf) {
 }
 
 function writeValue(value, pbf) {
-  const type = typeof value;
-  if (type === 'string') {
-    pbf.writeStringField(1, value);
-  } else if (type === 'boolean') {
-    pbf.writeBooleanField(7, value);
-  } else if (type === 'number') {
-    if (value % 1 !== 0) {
-      pbf.writeDoubleField(3, value);
-    } else if (value < 0) {
-      pbf.writeSVarintField(6, value);
-    } else {
-      pbf.writeVarintField(5, value);
-    }
+  switch (typeof value) {
+    case 'string':
+      pbf.writeStringField(1, value);
+      break;
+    case 'boolean':
+      pbf.writeBooleanField(7, value);
+      break;
+    case 'number':
+      if (value % 1 !== 0) {
+        pbf.writeDoubleField(3, value);
+      } else if (value < 0) {
+        pbf.writeSVarintField(6, value);
+      } else {
+        pbf.writeVarintField(5, value);
+      }
+      break;
   }
 }

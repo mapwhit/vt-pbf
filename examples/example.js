@@ -1,6 +1,6 @@
-const fs = require('node:fs');
-const geojsonVt = require('geojson-vt');
-const vtpbf = require('../');
+import fs from 'node:fs';
+import geojsonVt from 'geojson-vt';
+import * as vtpbf from '../index.js';
 
 // Example: read geojson from a file and write a protobuf
 // Usage: node example.js filename.geojson z x y > tile.z.x.y.pbf

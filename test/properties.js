@@ -1,14 +1,13 @@
-const test = require('node:test');
-const fs = require('node:fs');
-const path = require('node:path');
-const Pbf = require('pbf');
-const { default: geojsonVt } = require('geojson-vt');
-const { VectorTile } = require('@mapwhit/vector-tile');
-const GeoJsonEquality = require('geojson-equality');
+import fs from 'node:fs';
+import path from 'node:path';
+import test from 'node:test';
+import { VectorTile } from '@mapwhit/vector-tile';
+import GeoJsonEquality from 'geojson-equality';
+import geojsonVt from 'geojson-vt';
+import Pbf from 'pbf';
+import * as vtpbf from '../index.js';
 
 const eq = new GeoJsonEquality({ precision: 1 });
-
-const vtpbf = require('../');
 
 global.DEBUG = true;
 
@@ -136,7 +135,7 @@ test('id encoding', t => {
 test('accept geojson-vt options https://github.com/mapbox/vt-pbf/pull/21', t => {
   const version = 2;
   const extent = 8192;
-  const orig = JSON.parse(fs.readFileSync(path.join(__dirname, '/fixtures/rectangle.geojson')));
+  const orig = JSON.parse(fs.readFileSync(path.join(import.meta.dirname, '/fixtures/rectangle.geojson')));
   const tileindex = geojsonVt(orig, { extent });
   const tile = tileindex.getTile(1, 0, 0);
   const options = { version, extent };

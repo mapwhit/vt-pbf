@@ -1,10 +1,7 @@
-const Pbf = require('@mapwhit/pbf');
-const GeoJSONWrapper = require('./lib/geojson_wrapper');
-
-module.exports = fromVectorTileJs;
-module.exports.fromVectorTileJs = fromVectorTileJs;
-module.exports.fromGeojsonVt = fromGeojsonVt;
-module.exports.GeoJSONWrapper = GeoJSONWrapper;
+import Pbf from '@mapwhit/pbf';
+import GeoJSONWrapper from './lib/geojson_wrapper.js';
+export default fromVectorTileJs;
+export { GeoJSONWrapper };
 
 /**
  * Serialize a vector-tile-js-created tile to pbf
@@ -12,7 +9,7 @@ module.exports.GeoJSONWrapper = GeoJSONWrapper;
  * @param {Object} tile
  * @return {Buffer} uncompressed, pbf-serialized tile data
  */
-function fromVectorTileJs(tile) {
+export function fromVectorTileJs(tile) {
   const out = new Pbf();
   writeTile(tile, out);
   return out.finish();
@@ -27,7 +24,7 @@ function fromVectorTileJs(tile) {
  * @param {Number} [options.extent=4096] - Extent of the vector tile
  * @return {Buffer} uncompressed, pbf-serialized tile data
  */
-function fromGeojsonVt(layers, options = {}) {
+export function fromGeojsonVt(layers, options = {}) {
   const l = {};
   for (const k in layers) {
     l[k] = new GeoJSONWrapper(layers[k].features, options);

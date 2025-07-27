@@ -40,22 +40,12 @@
         "noUndeclaredVariables": "error",
         "noUnusedVariables": "error"
       },
-      "complexity": {
-        "noForEach": "off"
-      },
       "style": {
-        "noParameterAssign": "off",
         "useDefaultParameterLast": "error",
         "useSingleVarDeclarator": "error",
         "noUnusedTemplateLiteral": "error",
         "useNumberNamespace": "error",
         "noUselessElse": "error"
-      },
-      "performance": {
-        "noDelete": "off"
-      },
-      "suspicious": {
-        "noAssignInExpressions": "off"
       }
     }
   }

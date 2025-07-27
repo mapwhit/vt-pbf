@@ -1,13 +1,13 @@
-const test = require('node:test');
-const { default: geojsonVt } = require('geojson-vt');
-const { VectorTile } = require('@mapwhit/vector-tile');
-const Pbf = require('pbf');
-const geojsonFixtures = require('@mapbox/geojson-fixtures');
-const mvtf = require('@mapbox/mvt-fixtures');
-const GeoJsonEquality = require('geojson-equality');
-const eq = new GeoJsonEquality({ precision: 1 });
+import test from 'node:test';
+import geojsonFixtures from '@mapbox/geojson-fixtures';
+import mvtf from '@mapbox/mvt-fixtures';
+import { VectorTile } from '@mapwhit/vector-tile';
+import GeoJsonEquality from 'geojson-equality';
+import geojsonVt from 'geojson-vt';
+import Pbf from 'pbf';
+import * as vtpbf from '../index.js';
 
-const vtpbf = require('../');
+const eq = new GeoJsonEquality({ precision: 1 });
 
 const geometryTypes = ['polygon', 'point', 'multipoint', 'multipolygon', 'polygon', 'multilinestring'];
 
@@ -51,7 +51,7 @@ mvtf.each(fixture => {
       return;
     }
 
-    const buff = vtpbf(original);
+    const buff = vtpbf.fromVectorTileJs(original);
     const roundtripped = new VectorTile(new Pbf(buff));
 
     // Compare roundtripped features with originals

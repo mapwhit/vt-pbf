@@ -1,4 +1,14 @@
 
+2.0.0 / 2025-07-27
+==================
+
+ * upgrade `@mapwhit/vector-tile` to ~2
+ * remove unused GeoJSON wrapper
+ * use maps for properties cache
+ * split geojson and vector implementation
+ * simplify and clean up code
+ * transition to ESM format
+
 1.1.1 / 2025-07-25
 ==================
 
